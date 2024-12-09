@@ -1,6 +1,8 @@
-// Instantiate variables
+// Global variables for tracking statistics
 let playerName = '';
 let keepPlaying = true;
+let totalGames = 0;
+let totalWins = 0;
 
 // Welcome message and ask for player name once
 function startSession() {
@@ -18,11 +20,13 @@ function startSession() {
 function guessingGame() {
   startSession();
   while (keepPlaying) {
+    totalGames++;
     const numberToGuess = Math.floor(Math.random() * 10) + 1;
     const guess = prompt(`${playerName}, guess a number between 1 and 10:`);
 
     if (parseInt(guess) === numberToGuess) {
       alert("Correct! You guessed the number!");
+      totalWins++;
     } else {
       alert(`Wrong! The correct number was ${numberToGuess}.`);
     }
@@ -36,6 +40,7 @@ function guessingGame() {
 const consultOracle = function () {
   startSession();
   while (keepPlaying) {
+    totalGames++;
     const question = prompt(`${playerName}, ask the Oracle your question:`);
     const responses = ["Yes", "No", "Maybe", "Definitely", "I cannot say."];
     const answer = responses[Math.floor(Math.random() * responses.length)];
@@ -50,6 +55,7 @@ const consultOracle = function () {
 const bnh = () => {
   startSession();
   while (keepPlaying) {
+    totalGames++;
     const choices = ["Bear", "Ninja", "Hunter"];
     const playerChoice = prompt(`${playerName}, choose Bear, Ninja, or Hunter:`).toLowerCase();
     const computerChoice = choices[Math.floor(Math.random() * choices.length)].toLowerCase();
@@ -69,6 +75,7 @@ const bnh = () => {
       alert(`You lose! ${computerChoice} beats ${playerChoice}.`);
     } else {
       alert(`You win! ${playerChoice} beats ${computerChoice}.`);
+      totalWins++;
     }
 
     keepPlaying = confirm(`${playerName}, would you like to keep playing this game?`);
@@ -76,11 +83,17 @@ const bnh = () => {
   endSession();
 };
 
-// End session
+// End session and display statistics
 function endSession() {
   const playAnother = confirm(`${playerName}, would you like to pick another game to play?`);
   if (!playAnother) {
     document.getElementById("farewell").style.display = "block";
+
+    const winPercentage = ((totalWins / totalGames) * 100).toFixed(2);
+
+    document.getElementById("totalGames").textContent = totalGames;
+    document.getElementById("totalWins").textContent = totalWins;
+    document.getElementById("winPercentage").textContent = `${winPercentage}%`;
   } else {
     keepPlaying = true;
   }
